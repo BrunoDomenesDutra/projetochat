@@ -11,5 +11,16 @@ export const auth = betterAuth({
       clientId: process.env.TWITCH_CLIENT_ID as string,
       clientSecret: process.env.TWITCH_CLIENT_SECRET as string,
     },
+    // kick: {
+    //   clientId: process.env.KICK_CLIENT_ID as string,
+    //   clientSecret: process.env.KICK_CLIENT_SECRET as string,
+    // },
+    google: {
+      clientId: process.env.GOOGLE_CLIENT_ID as string,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
+    },
+  },
+  session: {
+    freshAge: 60 * 5, // 5 minutes
   },
 })

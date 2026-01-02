@@ -1,7 +1,14 @@
+'use client'
+
+import { useSession } from '@/lib/auth-client'
+import { redirect } from 'next/navigation'
+
 export default function Home() {
-  return (
-    <div>
-      <h1>Welcome to Projeto Chat!</h1>
-    </div>
-  )
+  const { data: session } = useSession()
+
+  if (session) {
+    redirect('/dashboard') // usuário logado → vai pro dashboard
+  }
+
+  redirect('/login') // não logado → vai pro login
 }
