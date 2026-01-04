@@ -5,7 +5,7 @@ export async function proxy(request: NextRequest) {
   const sessionCookie = getSessionCookie(request)
 
   // Rotas públicas: não exigem autenticação
-  const publicRoutes = ['/login']
+  const publicRoutes = ['/login', '/obs']
 
   const path = request.nextUrl.pathname
 
