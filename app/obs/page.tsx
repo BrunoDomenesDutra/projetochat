@@ -18,7 +18,7 @@ export default function ObsDonationPage() {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 items-center justify-center bg-transparent p-4">
-      <DonationProgress />
+      {/* <DonationProgress /> */}
       <ThematicMetas />
     </div>
   )

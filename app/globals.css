@@ -123,3 +123,26 @@
     @apply bg-background text-foreground;
   }
 }
+
+@keyframes floatConfetti {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-30px) rotate(20deg);
+    opacity: 0;
+  }
+}
+
+.animate-confetti {
+  animation: floatConfetti 0.6s ease-out forwards;
+}
+
+.animate-confetti-delayed {
+  animation: floatConfetti 0.6s ease-out 0.1s forwards;
+}
+
+.animate-confetti-slow {
+  animation: floatConfetti 0.8s ease-out 0.05s forwards;
+}

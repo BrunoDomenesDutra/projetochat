@@ -1,47 +1,13 @@
 // components/obs/donation-progress.tsx
 'use client'
 
-import { useEffect, useState } from 'react'
-import { getSocket } from '@/lib/socket/client'
+import { useSocketState } from '@/lib/socket/useSocketState'
 import { AnimatedProgressBar } from '@/components/ui/animated-progress-bar'
 
-interface MetaState {
-  name: string
-  current: number
-  goal: number
-}
-
-interface FullState {
-  global: { totalAmount: number }
-  metas: MetaState[]
-}
-
 export function DonationProgress() {
-  const [fullState, setFullState] = useState<FullState | null>(null)
-  const [isConnected, setIsConnected] = useState(false)
+  const { fullState, isLoading, isConnected } = useSocketState()
 
-  useEffect(() => {
-    const socket = getSocket()
-
-    const handleFullState = (data: FullState) => {
-      setFullState(data)
-    }
-
-    const handleConnect = () => setIsConnected(true)
-    const handleDisconnect = () => setIsConnected(false)
-
-    socket.on('fullState', handleFullState)
-    socket.on('connect', handleConnect)
-    socket.on('disconnect', handleDisconnect)
-
-    return () => {
-      socket.off('fullState', handleFullState)
-      socket.off('connect', handleConnect)
-      socket.off('disconnect', handleDisconnect)
-    }
-  }, [])
-
-  if (!fullState) {
+  if (isLoading || !fullState) {
     return (
       <div className="flex items-center justify-center h-full text-white bg-black bg-opacity-50">
         <p>Carregando...</p>
@@ -49,15 +15,12 @@ export function DonationProgress() {
     )
   }
 
-  // 🔁 Encontra a PRÓXIMA meta geral a ser alcançada
   const total = fullState.global.totalAmount
-  let currentGoal = 500 // meta inicial padrão
+  let currentGoal = 500
   let reachedGoals = 0
 
-  // Supõe que as metas gerais estão ordenadas por valor (500, 1000, 1500, ...)
   const generalMetas = fullState.metas.filter((meta) => meta.name.startsWith('geral_')).sort((a, b) => a.goal - b.goal)
 
-  // Calcula quantas metas já foram atingidas
   for (const meta of generalMetas) {
     if (total >= meta.goal) {
       currentGoal = meta.goal
@@ -68,10 +31,9 @@ export function DonationProgress() {
     }
   }
 
-  // Se todas forem atingidas, cria a próxima meta (ex: última + 500)
   if (reachedGoals === generalMetas.length && generalMetas.length > 0) {
     const lastGoal = generalMetas[generalMetas.length - 1].goal
-    currentGoal = lastGoal + 500 // ou o incremento que você quiser
+    currentGoal = lastGoal + 500
   }
 
   const progress = Math.min(100, (total / currentGoal) * 100)

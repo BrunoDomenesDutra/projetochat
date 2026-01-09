@@ -3,18 +3,7 @@
 
 import { useState, useEffect } from 'react'
 import { getSocket } from './client'
-
-// Tipos (você pode mover para lib/types.ts depois)
-export interface MetaState {
-  name: string
-  current: number
-  goal: number
-}
-
-export interface FullState {
-  global: { totalAmount: number }
-  metas: MetaState[]
-}
+import { FullState } from './types'
 
 export const useSocketState = () => {
   const [fullState, setFullState] = useState<FullState | null>(null)
@@ -51,7 +40,7 @@ export const useSocketState = () => {
     socket.on('connect_error', handleError)
 
     // Força um pedido de estado inicial (opcional)
-    socket.emit('getState') // se você quiser implementar no worker
+    socket.emit('getState') // se quiser implementar no worker
 
     return () => {
       socket.off('fullState', handleFullState)
