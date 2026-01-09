@@ -1,7 +1,6 @@
 // app/obs/page.tsx
 'use client'
 
-import { DonationProgress } from '@/components/obs/donation-progress'
 import { ThematicMetas } from '@/components/obs/thematic-metas'
 import { useEffect } from 'react'
 
@@ -18,7 +17,6 @@ export default function ObsDonationPage() {
 
   return (
     <div className="min-h-screen flex flex-col gap-4 items-center justify-center bg-transparent p-4">
-      {/* <DonationProgress /> */}
       <ThematicMetas />
     </div>
   )
