@@ -7,7 +7,17 @@ import { ProgressBar } from '@/components/ui/progress-bar/progress-bar'
 
 export function ThematicMetas() {
   const { fullState } = useSocketState()
-  const [hiddenMetaIds, setHiddenMetaIds] = useState<Set<number>>(new Set())
+  const [hiddenMetaIds, setHiddenMetaIds] = useState<Set<number>>(() => {
+    // Carrega metas escondidas do localStorage ao inicializar
+    if (typeof window === 'undefined') return new Set()
+    const stored = localStorage.getItem('hiddenThematicMetas')
+    return stored ? new Set(JSON.parse(stored)) : new Set()
+  })
+
+  // Sincroniza hiddenMetaIds com localStorage sempre que mudar
+  useEffect(() => {
+    localStorage.setItem('hiddenThematicMetas', JSON.stringify(Array.from(hiddenMetaIds)))
+  }, [hiddenMetaIds])
 
   useEffect(() => {
     if (!fullState) return
