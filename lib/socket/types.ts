@@ -1,16 +1,45 @@
 // projetochat/lib/socket/types.ts
 
-export interface MetaState {
-  id?: number
-  active?: boolean
+export interface TargetSnapshot {
+  id: number
   name: string
+  goal: number | null
   current: number
-  goal: number
-  completed?: boolean
-  completed_at?: string | null
+  completed: boolean
 }
 
-export interface FullState {
-  global: { totalAmount: number }
-  metas: MetaState[]
+export interface IncentiveSnapshot {
+  id: number
+  name: string
+  trigger: number
+  unlocked: boolean
+  unlockedAt?: string | null
+}
+
+export interface Snapshot {
+  total: number
+  targets: TargetSnapshot[]
+  incentives: IncentiveSnapshot[]
+}
+
+export interface AnimatableEvents {
+  targetsCompleted: {
+    id: number
+    name: string
+    completedAt: string
+  }[]
+  incentivesUnlocked: {
+    id: number
+    name: string
+    unlockedAt: string
+  }[]
+}
+
+export interface AnimatablePayload {
+  snapshot: Snapshot
+  events: AnimatableEvents
+  meta: {
+    reason: 'initial_state' | 'donation_processed'
+    emittedAt: string
+  }
 }

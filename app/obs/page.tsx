@@ -1,23 +1,17 @@
 // app/obs/page.tsx
 'use client'
 
+import { useState } from 'react'
 import { ThematicMetas } from '@/components/obs/thematic-metas'
-import { useEffect } from 'react'
+import { AdminPanelTemp } from '@/components/obs/admin-panel-temp'
 
 export default function ObsDonationPage() {
-  // useEffect(() => {
-  //   // Remove fundo branco para OBS (fundo transparente)
-  //   document.body.classList.add('bg-transparent')
-  //   document.documentElement.classList.add('bg-transparent')
-  //   return () => {
-  //     document.body.classList.remove('bg-transparent')
-  //     document.documentElement.classList.remove('bg-transparent')
-  //   }
-  // }, [])
+  const [visibleTargets, setVisibleTargets] = useState<number[]>([])
 
   return (
-    <div className="min-h-screen flex flex-col gap-4 items-center justify-center bg-transparent p-4">
+    <div className="flex gap-6 p-4">
       <ThematicMetas />
+      <AdminPanelTemp />
     </div>
   )
 }

@@ -1,54 +1,41 @@
 // projetochat/lib/socket/useSocketState.ts
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { getSocket } from './client'
-import { FullState } from './types'
+import { AnimatablePayload, Snapshot } from './types'
 
 export const useSocketState = () => {
-  const [fullState, setFullState] = useState<FullState | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
+  const [snapshot, setSnapshot] = useState<Snapshot | null>(null)
+  const [events, setEvents] = useState<AnimatablePayload['events'] | null>(null)
+  const [meta, setMeta] = useState<AnimatablePayload['meta'] | null>(null)
   const [isConnected, setIsConnected] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     const socket = getSocket()
 
-    const handleFullState = (data: FullState) => {
-      setFullState(data)
+    const handleState = (payload: AnimatablePayload) => {
+      setSnapshot(payload.snapshot)
+      setEvents(payload.events)
+      setMeta(payload.meta)
       setIsLoading(false)
     }
 
-    const handleConnect = () => {
-      setIsConnected(true)
-      setIsLoading(false)
-    }
-
-    const handleDisconnect = () => {
-      setIsConnected(false)
-      setIsLoading(true)
-    }
-
-    const handleError = (error: Error) => {
-      console.error('Socket.IO Error:', error)
-    }
-
-    // Só adiciona listeners se ainda não tiverem sido adicionados
-    // (por conta do singleton, evita duplicatas)
-    socket.on('fullState', handleFullState)
-    socket.on('connect', handleConnect)
-    socket.on('disconnect', handleDisconnect)
-    socket.on('connect_error', handleError)
-
-    // Força um pedido de estado inicial (opcional)
-    socket.emit('getState') // se quiser implementar no worker
+    socket.on('state', handleState)
+    socket.on('connect', () => setIsConnected(true))
+    socket.on('disconnect', () => setIsConnected(false))
 
     return () => {
-      socket.off('fullState', handleFullState)
-      socket.off('connect', handleConnect)
-      socket.off('disconnect', handleDisconnect)
-      socket.off('connect_error', handleError)
+      socket.off('state', handleState)
     }
   }, [])
 
-  return { fullState, isLoading, isConnected }
+  return {
+    snapshot,
+    events,
+    meta,
+    isConnected,
+    isLoading,
+  }
 }
