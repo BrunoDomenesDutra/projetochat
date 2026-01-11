@@ -8,8 +8,14 @@ import { ProgressBar } from '@/components/ui/progress-bar/progress-bar'
 export function ThematicMetas() {
   const { fullState } = useSocketState()
   const [hiddenMetaIds, setHiddenMetaIds] = useState<Set<number>>(() => {
-    // Carrega metas escondidas do localStorage ao inicializar
     if (typeof window === 'undefined') return new Set()
+
+    // 👇 Modo dev: limpa sempre
+    if (new URLSearchParams(window.location.search).has('dev')) {
+      localStorage.removeItem('hiddenThematicMetas')
+      return new Set()
+    }
+
     const stored = localStorage.getItem('hiddenThematicMetas')
     return stored ? new Set(JSON.parse(stored)) : new Set()
   })
@@ -52,8 +58,9 @@ export function ThematicMetas() {
 
   const thematicMetas = fullState.metas
     .filter((meta) => !meta.name.startsWith('geral_'))
-    .filter((meta) => !hiddenMetaIds.has(meta.id!)) // 👈 esconde as concluídas
+    .filter((meta) => !hiddenMetaIds.has(meta.id!))
     .sort((a, b) => a.goal - b.goal)
+    .slice(0, 4) // 👈 LIMITA A 4 METAS
 
   if (thematicMetas.length === 0) return null
 
