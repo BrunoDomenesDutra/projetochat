@@ -142,3 +142,37 @@
 .meta-completed-anim {
   animation: metaComplete 1.5s ease-out;
 }
+
+@keyframes metaAppear {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px) scale(0.95);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+
+.meta-appear-anim {
+  animation: metaAppear 0.6s ease-out;
+}
+
+@keyframes metaComplete {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 255, 0, 0);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px rgba(0, 255, 0, 0.8);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 rgba(0, 255, 0, 0);
+  }
+}
+
+.meta-completed-anim {
+  animation: metaComplete 1.5s ease-out;
+}

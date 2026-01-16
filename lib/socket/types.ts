@@ -6,6 +6,7 @@ export interface TargetSnapshot {
   goal: number | null
   current: number
   completed: boolean
+  visible: boolean
 }
 
 export interface IncentiveSnapshot {
