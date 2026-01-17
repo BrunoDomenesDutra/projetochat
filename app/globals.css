@@ -156,6 +156,8 @@
 
 .meta-appear-anim {
   animation: metaAppear 0.6s ease-out;
+  /* Garante que começa invisível */
+  animation-fill-mode: backwards;
 }
 
 @keyframes metaComplete {
